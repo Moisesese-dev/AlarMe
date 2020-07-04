@@ -1,8 +1,9 @@
 package com.moisesese.alarme
-import java.time.LocalDateTime
+import java.util.*
 
 data class AlarmItem (
     val alarmHour : String,
     val alarmDays : String,
-    var alarmEnable : Boolean = false
+    var alarmEnable : Boolean = false,
+    val id : UUID = UUID.randomUUID()
 )

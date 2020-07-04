@@ -1,31 +1,52 @@
 package com.moisesese.alarme
 
 import android.os.Bundle
-import android.os.Environment
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.google.gson.Gson
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
 
+    var tabLayout: TabLayout? = null
+    var viewPager: ViewPager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //JSON FILE creation
+        val jsonAlarms = this.createFolderAndFile()
+        JsonData.writeAlarmTEST(jsonAlarms)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-        val jsonAlarms = this.createFolderAndFile()
-        JsonData.writeAlarmTEST(jsonAlarms)
+        tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        viewPager = findViewById<ViewPager>(R.id.viewPager)
+
+        tabLayout!!.tabGravity = TabLayout.GRAVITY_FILL
+
+        val adapter = ViewPagerAdapter(this, supportFragmentManager)
+        viewPager!!.adapter = adapter
+        viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+
+        tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewPager!!.currentItem = tab.position
+            }
+        })
+        tabLayout!!.setupWithViewPager(viewPager)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
